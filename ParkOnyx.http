@@ -1,0 +1,6 @@
+@ParkOnyx_HostAddress = http://localhost:5200
+
+GET {{ParkOnyx_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
