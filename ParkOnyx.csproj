@@ -7,8 +7,37 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="8.0.6"/>
-        <PackageReference Include="Swashbuckle.AspNetCore" Version="6.4.0"/>
+        <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="8.0.6" />
+        <PackageReference Include="Microsoft.EntityFrameworkCore" Version="8.0.10" />
+        <PackageReference Include="Swashbuckle.AspNetCore" Version="6.4.0" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <_ContentIncludedByDefault Remove="Api\appsettings.Development.json" />
+      <_ContentIncludedByDefault Remove="Api\appsettings.json" />
+      <_ContentIncludedByDefault Remove="Api\obj\Api.csproj.nuget.dgspec.json" />
+      <_ContentIncludedByDefault Remove="Api\obj\project.assets.json" />
+      <_ContentIncludedByDefault Remove="Api\obj\project.packagespec.json" />
+      <_ContentIncludedByDefault Remove="Api\Properties\launchSettings.json" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <Folder Include="Api\Controllers\" />
+      <Folder Include="Core\Extensions\" />
+      <Folder Include="Core\Interfaces\" />
+      <Folder Include="Core\MapperProfiles\" />
+      <Folder Include="Domain\Constants\" />
+      <Folder Include="Domain\Enums\" />
+      <Folder Include="Domain\Helpers\" />
+      <Folder Include="Repositories\Extensions\" />
+      <Folder Include="Repositories\Interfaces\" />
+      <Folder Include="Repositories\Migrations\" />
+      <Folder Include="Repositories\Queries\" />
+      <Folder Include="Repositories\UoW\" />
+      <Folder Include="Services\Constants\" />
+      <Folder Include="Services\Interfaces\" />
+      <Folder Include="Settings\" />
+      <Folder Include="Tests\" />
     </ItemGroup>
 
 </Project>
