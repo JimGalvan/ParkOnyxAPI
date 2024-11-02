@@ -1,13 +1,29 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using System.Linq.Expressions;
+using Microsoft.EntityFrameworkCore;
 using ParkOnyx.Domain.Models;
 using ParkOnyx.Entities;
 using ParkOnyx.Repositories.Contexts;
 
 namespace ParkOnyx.Repositories;
 
-public abstract class BaseRepository<TEntity>(DataContext context) where TEntity : BaseEntity
+public abstract class BaseRepository<TEntity> where TEntity : BaseEntity
 {
-    protected readonly DataContext _context = context;
+    protected readonly DataContext _context;
+    public DbSet<TEntity>? objects;
+
+    public BaseRepository(DataContext context)
+    {
+        _context = context;
+        objects = _context.Set<TEntity>();
+    }
+
+    public async Task<TEntity?> FirstOrDefaultAsync(Expression<Func<TEntity, bool>> predicate,
+        CancellationToken cancellationToken)
+    {
+        return await _context.Set<TEntity>()
+            .Where(predicate)
+            .FirstOrDefaultAsync(cancellationToken);
+    }
 
     public virtual async Task AddAsync(TEntity entity, CancellationToken cancellationToken)
     {
@@ -32,6 +48,17 @@ public abstract class BaseRepository<TEntity>(DataContext context) where TEntity
         return await _context.Set<TEntity>()
             .Where(x => x.Id == id)
             .FirstOrDefaultAsync(cancellationToken);
+    }
+
+    public virtual async Task<bool> AnyAsync(Expression<Func<TEntity, bool>> predicate,
+        CancellationToken cancellationToken)
+    {
+        return await _context.Set<TEntity>().AnyAsync(predicate, cancellationToken);
+    }
+
+    public virtual async Task SaveChangesAsync(CancellationToken cancellationToken)
+    {
+        await _context.SaveChangesAsync(cancellationToken);
     }
 
     public virtual async Task<List<TEntity>> SelectAll(DateTimeOffset fromDateTimeUtc, DateTimeOffset toDateTimeUtc,

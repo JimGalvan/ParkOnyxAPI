@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-public class ParkingSpot : BaseEntity
+public class ParkingSpotEntity : BaseEntity
 {
     [Required] public bool IsReserved { get; init; } // Whether the spot is currently reserved
 
@@ -12,8 +12,8 @@ public class ParkingSpot : BaseEntity
 
     // Foreign Key
     [Required] public Guid LotId { get; set; }
-    [ForeignKey("LotId")] public ParkingLot Lot { get; set; }
+    [ForeignKey("LotId")] public ParkingLotEntity LotEntity { get; set; }
 
     // Relationships
-    public ICollection<Reservation> Reservations { get; set; }
+    public ICollection<ReservationEntity> Reservations { get; set; }
 }

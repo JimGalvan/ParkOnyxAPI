@@ -4,7 +4,7 @@ using System;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-public class Reservation : BaseEntity
+public class ReservationEntity : BaseEntity
 {
     [Required] public DateTime StartTime { get; set; } // Reservation start time
 
@@ -14,8 +14,8 @@ public class Reservation : BaseEntity
 
     // Foreign Keys
     [Required] public Guid UserId { get; set; }
-    [ForeignKey("UserId")] public User User { get; set; }
+    [ForeignKey("UserId")] public UserEntity UserEntity { get; set; }
 
     [Required] public Guid ParkingSpotId { get; set; }
-    [ForeignKey("ParkingSpotId")] public ParkingSpot Spot { get; set; }
+    [ForeignKey("ParkingSpotId")] public ParkingSpotEntity SpotEntity { get; set; }
 }

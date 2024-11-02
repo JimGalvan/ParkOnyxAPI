@@ -3,11 +3,12 @@
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
-public class User : BaseEntity
+public class UserEntity : BaseEntity
 {
     [Required] [MaxLength(50)] public string Username { get; set; } // Unique, Max Length: 50
 
-    [Required] [MaxLength(255)] public string Password { get; set; } // Hashed Password, Max Length: 255
+    public byte[]? PasswordHash { get; init; }
+    public byte[]? PasswordSalt { get; init; }
 
     [Required]
     [EmailAddress]
@@ -17,6 +18,6 @@ public class User : BaseEntity
     [Required] [MaxLength(10)] public string Role { get; set; } // E.g., "User" or "Owner", Max Length: 10
 
     // Relationships
-    public ICollection<Reservation> Reservations { get; set; }
-    public ICollection<ParkingLot> OwnedParkingLots { get; set; }
+    public ICollection<ReservationEntity> Reservations { get; set; }
+    public ICollection<ParkingLotEntity> OwnedParkingLots { get; set; }
 }

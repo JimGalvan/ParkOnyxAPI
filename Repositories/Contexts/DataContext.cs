@@ -9,8 +9,8 @@ public class DataContext : DbContext
     {
     }
 
-    public DbSet<User> UserEntities { get; init; }
-    public DbSet<Reservation> ReservationEntities { get; init; }
-    public DbSet<ParkingLot> ParkingLotEntities { get; init; }
-    public DbSet<ParkingSpot> ParkingSpotEntities { get; init; }
+    public DbSet<UserEntity> UserEntities { get; init; }
+    public DbSet<ReservationEntity> ReservationEntities { get; init; }
+    public DbSet<ParkingLotEntity> ParkingLotEntities { get; init; }
+    public DbSet<ParkingSpotEntity> ParkingSpotEntities { get; init; }
 }

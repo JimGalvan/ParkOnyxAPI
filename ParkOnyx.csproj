@@ -26,10 +26,8 @@
     </ItemGroup>
 
     <ItemGroup>
-      <Folder Include="Api\Controllers\" />
-      <Folder Include="Core\Extensions\" />
-      <Folder Include="Core\Interfaces\" />
-      <Folder Include="Core\MapperProfiles\" />
+      <Folder Include="Services\Extensions\" />
+      <Folder Include="Services\MapperProfiles\" />
       <Folder Include="Domain\Constants\" />
       <Folder Include="Domain\Enums\" />
       <Folder Include="Domain\Helpers\" />
@@ -38,8 +36,6 @@
       <Folder Include="Repositories\Migrations\" />
       <Folder Include="Repositories\Queries\" />
       <Folder Include="Repositories\UoW\" />
-      <Folder Include="Services\Constants\" />
-      <Folder Include="Services\Interfaces\" />
       <Folder Include="Settings\" />
       <Folder Include="Tests\" />
     </ItemGroup>

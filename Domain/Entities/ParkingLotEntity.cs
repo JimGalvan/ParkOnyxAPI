@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-public class ParkingLot : BaseEntity
+public class ParkingLotEntity : BaseEntity
 {
     [Required] [MaxLength(100)] public string Name { get; set; } // Name of the parking lot, Max Length: 100
 
@@ -22,8 +22,8 @@ public class ParkingLot : BaseEntity
 
     // Foreign Key
     [Required] public Guid OwnerId { get; set; }
-    [ForeignKey("OwnerId")] public User Owner { get; set; }
+    [ForeignKey("OwnerId")] public UserEntity Owner { get; set; }
 
     // Relationships
-    public ICollection<ParkingSpot> ParkingSpots { get; set; }
+    public ICollection<ParkingSpotEntity> ParkingSpots { get; set; }
 }
