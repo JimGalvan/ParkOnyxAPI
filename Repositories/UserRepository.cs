@@ -1,9 +1,13 @@
-﻿using Microsoft.EntityFrameworkCore;
-using ParkOnyx.Entities;
+﻿using ParkOnyx.Entities;
 using ParkOnyx.Repositories.Contexts;
+using ParkOnyx.Repositories.Interfaces;
 
-namespace ParkOnyx.Repositories;
-
-public class UserRepository(DataContext context) : BaseRepository<UserEntity>(context)
+namespace ParkOnyx.Repositories
 {
+    public class UserRepository : BaseRepository<UserEntity>, IUserRepository
+    {
+        public UserRepository(DataContext context) : base(context)
+        {
+        }
+    }
 }

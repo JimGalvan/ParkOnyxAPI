@@ -1,11 +1,14 @@
-﻿namespace ParkOnyx.Entities;
+﻿using ParkOnyx.Domain.Enums;
+
+namespace ParkOnyx.Entities;
 
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
 public class UserEntity : BaseEntity
 {
-    [Required] [MaxLength(50)] public string Username { get; set; } // Unique, Max Length: 50
+    [Required] [MaxLength(50)] public string? FirstName { get; set; }
+    [Required] [MaxLength(50)] public string? LastName { get; set; }
 
     public byte[]? PasswordHash { get; init; }
     public byte[]? PasswordSalt { get; init; }
@@ -13,11 +16,11 @@ public class UserEntity : BaseEntity
     [Required]
     [EmailAddress]
     [MaxLength(100)]
-    public string Email { get; set; } // Unique, Max Length: 100
+    public string? Email { get; init; }
 
-    [Required] [MaxLength(10)] public string Role { get; set; } // E.g., "User" or "Owner", Max Length: 10
+    [Required] public List<UserRole> Roles { get; init; } = new();
 
     // Relationships
-    public ICollection<ReservationEntity> Reservations { get; set; }
-    public ICollection<ParkingLotEntity> OwnedParkingLots { get; set; }
+    public ICollection<ReservationEntity>? Reservations { get; set; }
+    public ICollection<ParkingLotEntity>? OwnedParkingLots { get; set; }
 }

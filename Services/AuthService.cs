@@ -8,7 +8,9 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Security.Cryptography;
 using System.Text;
+using ParkOnyx.Domain.Enums;
 using ParkOnyx.Repositories;
+using ParkOnyx.Repositories.Interfaces;
 
 namespace ParkOnyx.Services
 {
@@ -16,32 +18,50 @@ namespace ParkOnyx.Services
     {
         private readonly IConfiguration _configuration;
         private readonly ITokenBlacklistService _tokenBlacklistService;
-        private readonly UserRepository _userRepository;
+        private readonly IUserRepository _userRepository;
+        private readonly ILogger<AuthService> _logger;
 
-        public AuthService(UserRepository userRepository, IConfiguration configuration,
-            ITokenBlacklistService tokenBlacklistService)
+        public AuthService(IUserRepository userRepository, IConfiguration configuration,
+            ITokenBlacklistService tokenBlacklistService, ILogger<AuthService> logger)
         {
             _userRepository = userRepository;
             _configuration = configuration;
             _tokenBlacklistService = tokenBlacklistService;
+            _logger = logger;
         }
 
         public async Task<bool> RegisterUser(RegisterUserRequestDto request, CancellationToken cancellationToken)
         {
-            if (await _userRepository.AnyAsync(u => u.Username == request.Username, cancellationToken))
+            if (await _userRepository.AnyAsync(u => u.Email == request.Email, cancellationToken))
                 return false;
 
-            CreatePasswordHash(request.Password, out byte[] passwordHash, out byte[] passwordSalt);
+            CreatePasswordHash(request.Password!, out byte[] passwordHash, out byte[] passwordSalt);
 
             var user = new UserEntity
             {
                 Id = Guid.NewGuid(),
-                Username = request.Username,
+                FirstName = request.FirstName,
+                LastName = request.LastName,
+                Email = request.Email!,
                 PasswordHash = passwordHash,
                 PasswordSalt = passwordSalt
             };
 
-            _userRepository.AddAsync(user, cancellationToken);
+            var requestRole = request.Role?.ToLower().Trim() ?? string.Empty;
+
+            switch (requestRole)
+            {
+                case "owner":
+                    user.Roles.Add(UserRole.Owner);
+                    break;
+                case "user":
+                    user.Roles.Add(UserRole.User);
+                    break;
+                default:
+                    throw new InvalidDataException($"Invalid role provided. Provided role: {requestRole}.");
+            }
+
+            await _userRepository.AddAsync(user, cancellationToken);
             await _userRepository.SaveChangesAsync(cancellationToken);
 
             return true;
@@ -49,9 +69,9 @@ namespace ParkOnyx.Services
 
         public async Task<string?> LoginUser(LoginUserRequestDto request, CancellationToken cancellationToken)
         {
-            var user = await _userRepository.FirstOrDefaultAsync(u => u.Username == request.Username,
+            var user = await _userRepository.FirstOrDefaultAsync(u => u.Email == request.Email,
                 cancellationToken);
-            if (user == null || !VerifyPasswordHash(request.Password, user.PasswordHash, user.PasswordSalt))
+            if (user == null || !VerifyPasswordHash(request.Password!, user.PasswordHash!, user.PasswordSalt!))
                 return null;
 
             return CreateToken(user);
@@ -65,12 +85,19 @@ namespace ParkOnyx.Services
         private string CreateToken(UserEntity userEntity)
         {
             var key = _configuration["Jwt:Key"];
+
+            if (key == null)
+            {
+                _logger.LogError("JWT key is not configured.");
+                throw new InvalidOperationException("JWT key is not configured.");
+            }
+
             var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(key!));
 
             var claims = new[]
             {
                 new Claim(ClaimTypes.NameIdentifier, userEntity.Id.ToString()),
-                new Claim(ClaimTypes.Name, userEntity.Username)
+                new Claim(ClaimTypes.Name, userEntity.Email!)
             };
 
             var creds = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha512Signature);

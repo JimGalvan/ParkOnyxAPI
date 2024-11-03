@@ -5,7 +5,8 @@ using ParkOnyx.Services.Interfaces;
 namespace ParkOnyx.Api.Controllers
 {
     [ApiController]
-    [Route("api/[controller]")]
+    [ApiVersion("1.0")]
+    [Route("api/v{version:apiVersion}/[controller]")]
     public class AuthController : ControllerBase
     {
         private readonly IAuthService _authService;
@@ -16,7 +17,7 @@ namespace ParkOnyx.Api.Controllers
         }
 
         [HttpPost("Register")]
-        public async Task<ActionResult> Register(RegisterUserRequestDto request, CancellationToken cancellationToken)
+        public async Task<ActionResult> Register([FromBody]RegisterUserRequestDto request, CancellationToken cancellationToken)
         {
             var result = await _authService.RegisterUser(request, cancellationToken);
             if (!result)
