@@ -61,6 +61,13 @@ public abstract class BaseRepository<TEntity> where TEntity : BaseEntity
         await _context.SaveChangesAsync(cancellationToken);
     }
 
+    public virtual async Task<List<TEntity>> SelectAll(CancellationToken cancellationToken)
+    {
+        return await _context.Set<TEntity>()
+            .AsNoTracking()
+            .ToListAsync(cancellationToken);
+    }
+
     public virtual async Task<List<TEntity>> SelectAll(DateTimeOffset fromDateTimeUtc, DateTimeOffset toDateTimeUtc,
         int page, int limit, CancellationToken cancellationToken)
     {

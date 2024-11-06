@@ -13,6 +13,8 @@ public interface IBaseRepository<TEntity> where TEntity : BaseEntity
     Task<bool> AnyAsync(Expression<Func<TEntity, bool>> predicate, CancellationToken cancellationToken);
     Task SaveChangesAsync(CancellationToken cancellationToken);
 
+    Task<List<TEntity>> SelectAll(CancellationToken cancellationToken);
+
     Task<List<TEntity>> SelectAll(DateTimeOffset fromDateTimeUtc, DateTimeOffset toDateTimeUtc, int page, int limit,
         CancellationToken cancellationToken);
 

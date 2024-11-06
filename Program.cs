@@ -46,7 +46,7 @@ builder.Services.AddCors(options =>
         policyBuilder =>
         {
             policyBuilder // or the actual URL of your React app
-                .WithOrigins("http://localhost:3000") // Specify your allowed domain here
+                .WithOrigins("http://localhost:8081") // Specify your allowed domain here
                 .AllowAnyMethod()
                 .AllowAnyHeader();
         });
