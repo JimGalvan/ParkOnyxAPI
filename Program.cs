@@ -26,6 +26,7 @@ builder.Services.AddLogging();
 builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<ITokenBlacklistService, TokenBlacklistService>();
+builder.Services.AddScoped<IParkingLotRepository, ParkingLotRepository>();
 
 // DB context
 builder.Services.AddDbContext<DataContext>(options =>
